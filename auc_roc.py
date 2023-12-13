@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[71]:
-
-
 # Importing necessary libraries
 import pandas as pd
 import numpy as np
@@ -17,67 +11,35 @@ from sklearn.metrics import roc_curve, auc, confusion_matrix
 from sklearn.dummy import DummyClassifier
 import seaborn as sns
 
-
-# In[73]:
-
-
 # Loading the breast cancer dataset
 data = load_breast_cancer()
 X, y = data.data, data.target
 
-
-# In[77]:
-
-
 # Splitting the dataset into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-
-# In[12]:
-
 
 # Initializing the classifiers
 rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
 lr_classifier = LogisticRegression(max_iter=10000, random_state=42)  # Increase max_iter
 dt_classifier = DecisionTreeClassifier(random_state=42)
 
-
-# In[22]:
-
-
 # Random Classifier Model
 random_classifier = DummyClassifier(strategy="uniform", random_state=42)
 random_classifier.fit(X_train, y_train)
-
-
-# In[23]:
-
 
 # Training the models
 rf_classifier.fit(X_train, y_train)
 lr_classifier.fit(X_train, y_train)
 dt_classifier.fit(X_train, y_train)
 
-
-# In[ ]:
-
-
 random_classifier = DummyClassifier(strategy="uniform", random_state=42)
 random_classifier.fit(X_train, y_train)
-
-
-# In[24]:
-
 
 # Model estimations on the test data
 rf_y_pred = rf_classifier.predict_proba(X_test)[:, 1]
 lr_y_pred = lr_classifier.predict_proba(X_test)[:, 1]
 dt_y_pred = dt_classifier.predict_proba(X_test)[:, 1]
 random_y_pred = random_classifier.predict_proba(X_test)[:, 1]
-
-
-# In[27]:
-
 
 # Calculating ROC curve and AUC for each model
 rf_fpr, rf_tpr, _ = roc_curve(y_test, rf_y_pred)
@@ -91,10 +53,6 @@ dt_auc = auc(dt_fpr, dt_tpr)
 
 random_fpr, random_tpr, _ = roc_curve(y_test, random_y_pred)
 random_auc = auc(random_fpr, random_tpr)
-
-
-# In[82]:
-
 
 # Plotting ROC curves
 plt.figure(figsize=(8, 6))
@@ -111,11 +69,7 @@ plt.legend(loc='lower right')
 plt.grid(True)
 plt.show()
 
-
 # #### Calculating and displaying the confusion matrix and metrics for each model
-
-# In[43]:
-
 
 rf_conf_matrix = confusion_matrix(y_test, rf_classifier.predict(X_test))
 plt.figure(figsize=(8, 6))
@@ -126,10 +80,6 @@ plt.xlabel('Predicted Value')
 plt.ylabel('Real Value')
 plt.show()
 
-
-# In[42]:
-
-
 lr_conf_matrix = confusion_matrix(y_test, lr_classifier.predict(X_test))
 plt.figure(figsize=(8, 6))
 sns.heatmap(lr_conf_matrix, annot=True, fmt='d', cmap='Blues', cbar=False,
@@ -139,10 +89,6 @@ plt.xlabel('Predicted Value')
 plt.ylabel('Real Value')
 plt.show()
 
-
-# In[41]:
-
-
 dt_conf_matrix = confusion_matrix(y_test, dt_classifier.predict(X_test))
 plt.figure(figsize=(8, 6))
 sns.heatmap(dt_conf_matrix, annot=True, fmt='d', cmap='Blues', cbar=False,
@@ -151,10 +97,6 @@ plt.title('Confusion Matrix - Decision Tree')
 plt.xlabel('Predicted Value')
 plt.ylabel('Real Value')
 plt.show()
-
-
-# In[62]:
-
 
 plt.figure(figsize=(8, 6))
 sns.heatmap(dt_conf_matrix, annot=True, fmt='d', cmap='Blues', cbar=False,
